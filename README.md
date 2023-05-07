@@ -1,2 +1,2 @@
 # Jailbreak-detection-tool
-This tool is Jailbreak derection.
+This tool is Jailbreak detection.
