@@ -1,5 +1,6 @@
 import UIKit
 import Foundation
+import Darwin
 
 class ViewController: UIViewController {
     override func viewDidLoad() {
@@ -29,14 +30,12 @@ class ViewController: UIViewController {
             }
         }
         
-        if let cydiaURL = URL(string: "cydia://package/com.example.package") {
-            if UIApplication.shared.canOpenURL(cydiaURL) {
-                return true
-            }
+        if let cydiaURL = URL(string: "cydia://package/com.example.package"), UIApplication.shared.canOpenURL(cydiaURL) {
+            return true
         }
         
-        let taskForPid = unsafeBitCast(dlsym(UnsafeMutableRawPointer(bitPattern: -2)), to: (@convention(c) (Int32, UnsafeMutableRawPointer) -> Int32).self)
-        var kr = task_for_pid(mach_task_self_, Int32(ProcessInfo.processInfo.processIdentifier), nil)
+        var targetTask: Int32 = 0
+        var kr = task_for_pid(mach_task_self_, Int32(ProcessInfo.processInfo.processIdentifier), &targetTask)
         if kr != KERN_SUCCESS {
             return true
         }
